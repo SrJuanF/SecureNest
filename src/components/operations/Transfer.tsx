@@ -1,5 +1,6 @@
 import { useState } from "react";
-
+import { Bounce, toast } from "react-toastify";
+import { useAccount } from "wagmi";
 interface TransferProps {
 	handlePrivateTransfer: (to: string, amount: string) => Promise<void>;
 	shouldGenerateKey: boolean;
@@ -9,6 +10,7 @@ export function Transfer({
 	handlePrivateTransfer,
 	shouldGenerateKey,
 }: TransferProps) {
+	const { address } = useAccount();
 	const [transferAmount, setTransferAmount] = useState<string>("");
 	const [to, setTo] = useState<string>("");
 	const [loading, setLoading] = useState<boolean>(false);
@@ -26,6 +28,9 @@ export function Transfer({
 					representing <code>-amount</code>, which is homomorphically applied to
 					reduce their balance. Thanks to ElGamal’s additive homomorphism, this
 					update can be performed without revealing any values on-chain.
+					Meanwhile, Poseidon encryption creates efficient ciphertexts that
+					allow both sender and recipient to quickly decrypt their updated
+					balances locally without solving complex discrete logarithm problems.
 				</p>
 			</div>
 
@@ -53,6 +58,25 @@ export function Transfer({
 					type="button"
 					className="bg-cyber-dark w-full text-cyber-green px-2 py-1 rounded-md text-sm border border-cyber-green/60 disabled:opacity-50 disabled:cursor-not-allowed mb-2 hover:bg-cyber-green/60 transition-all duration-200 font-mono mt-2"
 					onClick={async () => {
+						if (to.toLowerCase() === address?.toLowerCase()) {
+							toast.error(
+								<div>
+									<p>You cannot transfer tokens to yourself</p>
+								</div>,
+								{
+									position: "top-right",
+									autoClose: 5000,
+									hideProgressBar: true,
+									closeOnClick: true,
+									pauseOnHover: false,
+									draggable: true,
+									progress: undefined,
+									transition: Bounce,
+								},
+							);
+							return;
+						}
+
 						setLoading(true);
 						handlePrivateTransfer(to, transferAmount)
 							.then(() => {
@@ -61,7 +85,25 @@ export function Transfer({
 								setTo("");
 							})
 							.catch((error) => {
-								console.error(error);
+								const isUserRejected = error?.details.includes("User rejected");
+								toast.error(
+									<div>
+										<p>
+											{isUserRejected ? "Transaction rejected" : error?.message}
+										</p>
+									</div>,
+									{
+										position: "top-right",
+										autoClose: 5000,
+										hideProgressBar: true,
+										closeOnClick: true,
+										pauseOnHover: false,
+										draggable: true,
+										progress: undefined,
+										transition: Bounce,
+									},
+								);
+
 								setLoading(false);
 							});
 					}}

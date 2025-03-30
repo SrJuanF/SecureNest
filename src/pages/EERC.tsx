@@ -25,9 +25,9 @@ import { Operations } from "../components/operations/Operations";
 import { MAX_UINT256, DEMO_TOKEN_ABI as erc20Abi } from "../pkg/constants";
 import { formatDisplayAmount } from "../pkg/helpers";
 
-const eERC_STANDALONE_ADDRESS = "0x0165878A594ca255338adfa4d48449f69242Eb8F";
-const ERC20_ADDRESS = "0x99bbA657f2BbC93c02D617f8bA121cB8Fc104Acf";
-const eERC_CONVERTER_ADDRESS = "0xFD471836031dc5108809D173A067e8486B9047A3";
+const eERC_STANDALONE_ADDRESS = "0x0B306BF915C4d645ff596e518fAf3F9669b97016";
+const ERC20_ADDRESS = "0xc3e53F4d16Ae77Db1c982e75a937B9f60FE63690";
+const eERC_CONVERTER_ADDRESS = "0x0165878A594ca255338adfa4d48449f69242Eb8F";
 
 export function EERC() {
 	const [txHash, setTxHash] = useState<`0x${string}`>("" as `0x${string}`);
@@ -418,7 +418,6 @@ export function EERC() {
 							console.log("Not connected");
 							return;
 						}
-
 						disconnectAsync();
 					}}
 				>
@@ -483,10 +482,20 @@ export function EERC() {
 				Generate Decryption Key
 			</button>
 
+			<Divider title="🧾 Registration" />
+
 			<div>
 				<p className="text-sm text-cyber-gray font-mono leading-relaxed indent-6">
-					You must register to the protocol with your wallet address and public
-					key for interacting with eERC protocol.
+					Every user must register to the protocol with their wallet address and
+					public key in order to interact with the eERC system. During
+					registration, the user derives a private key by signing a message with
+					their wallet, which is then used to generate a BabyJubjub public key
+					for ElGamal encryption. This public key is stored on-chain. At the
+					same time, a Poseidon hash is used to create a secure commitment that
+					links the user’s wallet address to their BabyJubjub keypair. This
+					registration step ensures that only the rightful owner of the wallet
+					can generate encrypted transactions, and that identity verification
+					can be performed efficiently inside zero-knowledge circuits.
 				</p>
 				<button
 					type="button"
@@ -588,7 +597,7 @@ export function EERC() {
 					</div>
 					<div className="grid grid-cols-[160px_1fr] gap-y-2 gap-x-2 items-center">
 						<div className="text-cyber-green">Decimals</div>
-						<div className="text-cyber-green/80 break-all">2</div>
+						<div className="text-cyber-green/80 break-all">{erc20Decimals}</div>
 
 						<div className="text-cyber-green">Balance</div>
 						<div className="text-cyber-green/80 break-all flex flex-row">
@@ -676,7 +685,7 @@ export function EERC() {
 				</div>
 			)}
 
-			<div className="border border-cyber-green/30 rounded-md p-4 font-mono text-sm bg-black/10 mt-2">
+			<div className="border border-cyber-green/30 rounded-md p-4 font-mono text-sm bg-black/10 mt-2 mb-4">
 				<div className="grid grid-cols-[160px_1fr] gap-y-2 gap-x-2 items-center">
 					<div className="text-cyber-gray">Decrypted Balance</div>
 					<div className="text-cyber-green/80 break-all">

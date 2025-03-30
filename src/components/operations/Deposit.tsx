@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Bounce, toast } from "react-toastify";
 
 interface DepositProps {
 	handlePrivateDeposit: (amount: string) => Promise<void>;
@@ -21,7 +22,7 @@ export function Deposit({
 					contract to spend your ERC-20 tokens. Once approved and deposited, the
 					contract receives the tokens and encrypts the deposited amount using
 					your public key. This encrypted value is then added to your private
-					balance using homomorphic operations.
+					balance using homomorphic addition.
 				</p>
 			</div>
 
@@ -50,6 +51,26 @@ export function Deposit({
 							})
 							.catch((error) => {
 								console.error(error);
+								const isUserRejected =
+									error?.details?.includes("User rejected");
+								toast.error(
+									<div>
+										<p>
+											{isUserRejected ? "Transaction rejected" : error?.message}
+										</p>
+									</div>,
+									{
+										position: "top-right",
+										autoClose: 5000,
+										hideProgressBar: true,
+										closeOnClick: true,
+										pauseOnHover: false,
+										draggable: true,
+										progress: undefined,
+										transition: Bounce,
+									},
+								);
+
 								setLoading(false);
 							});
 					}}
