@@ -8,7 +8,7 @@ import { PoseidonEncrypt } from "./pages/PoseidonEncrypt";
 export function App() {
 	const [selectedPage, setSelectedPage] = useState<
 		"hashes" | "ecc" | "EERC" | "poseidon"
-	>("poseidon");
+	>("EERC");
 
 	return (
 		<div className="flex min-h-screen bg-gray-100">
@@ -57,9 +57,6 @@ export function App() {
 						</p>
 					</li>
 				</ul>
-				<footer className="bg-cyber-dark mt-12 py-6 text-center text-cyber-gray">
-					<p className="font-mono">Built for Developers</p>
-				</footer>
 			</nav>
 
 			{/* Page Content */}
