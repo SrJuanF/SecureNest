@@ -6,7 +6,7 @@ import {
 	packPoint,
 } from "@zk-kit/baby-jubjub";
 import { useEffect, useMemo, useState } from "react";
-import { FaInfoCircle, FaKey, FaLock, FaUnlock } from "react-icons/fa";
+import { FaKey, FaLock, FaUnlock } from "react-icons/fa";
 import { IDENTITY_POINT } from "../../pkg/constants";
 import { fieldE, genKeyPair, genRandomScalar } from "../../pkg/jub";
 import type { IJubPoint } from "../../types";
@@ -22,7 +22,6 @@ export const ElGamal = () => {
 		privateKey: 0n,
 		publicKey: IDENTITY_POINT,
 	});
-	const [showSteps, setShowSteps] = useState(false);
 
 	const [ciphertext, setCiphertext] = useState<{
 		C1: IJubPoint;
@@ -137,29 +136,11 @@ export const ElGamal = () => {
 						<FaKey className="text-cyber-green" />
 						Key Pair
 					</h3>
-					<button
-						type="button"
-						onClick={() => setShowSteps(!showSteps)}
-						className="text-xs bg-cyber-dark px-2 py-1 rounded border border-cyber-green/30 hover:border-cyber-green/60 flex items-center gap-1"
-					>
-						<FaInfoCircle className="text-xs" />
-						{showSteps ? "Hide Steps" : "Show Steps"}
-					</button>
 				</div>
 				<GenerateKey
 					handleGenerateKeyPair={handleGenerateKeyPair}
 					keyPair={keyPair}
 				/>
-				{showSteps && (
-					<div className="mt-4 text-sm text-cyber-gray">
-						<h4 className="text-cyber-green mb-2">Key Generation Steps:</h4>
-						<ol className="list-decimal pl-6 space-y-2">
-							<li>Select a random private key (k)</li>
-							<li>Calculate public key (P = k × G)</li>
-							<li>Share public key, keep private key secret</li>
-						</ol>
-					</div>
-				)}
 			</div>
 
 			<Divider title="📦 Encryption" />
@@ -177,17 +158,6 @@ export const ElGamal = () => {
 					encryptionRandom={encryptionRandom}
 					setDecrypted={setDecrypted}
 				/>
-				{showSteps && (
-					<div className="mt-4 text-sm text-cyber-gray">
-						<h4 className="text-cyber-green mb-2">Encryption Steps:</h4>
-						<ol className="list-decimal pl-6 space-y-2">
-							<li>Convert message to point on curve (M)</li>
-							<li>Generate random value (r)</li>
-							<li>Calculate C1 = r × G</li>
-							<li>Calculate C2 = M + r × P</li>
-						</ol>
-					</div>
-				)}
 			</div>
 
 			<Divider title="🔑 Decryption" />
@@ -203,16 +173,6 @@ export const ElGamal = () => {
 					packedOriginal={packedOriginal}
 					packedDecrypted={packedDecrypted}
 				/>
-				{showSteps && (
-					<div className="mt-4 text-sm text-cyber-gray">
-						<h4 className="text-cyber-green mb-2">Decryption Steps:</h4>
-						<ol className="list-decimal pl-6 space-y-2">
-							<li>Calculate S = k × C1</li>
-							<li>Calculate M = C2 - S</li>
-							<li>Convert point back to message</li>
-						</ol>
-					</div>
-				)}
 			</div>
 		</>
 	);
