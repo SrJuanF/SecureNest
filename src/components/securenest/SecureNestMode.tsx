@@ -243,7 +243,7 @@ export function SecureNestMode({
 
     // Función para retirar del nest
     const handleNestWithdraw = async () => {
-        if (!nestId || !canWithdraw) return;
+        if (!nestId || !canWithdrawTimeLock) return;
 
         try {
             const txHash = await writeContractAsync({
