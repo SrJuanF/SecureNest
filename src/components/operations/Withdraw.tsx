@@ -15,14 +15,11 @@ export function Withdraw({
 	return (
 		<>
 			<div className="flex-1">
-				<h3 className="text-cyber-green font-bold mb-2">Withdraw</h3>
-				<p className="text-sm text-cyber-gray font-mono leading-relaxed mb-4">
-					When user try to withdraw tokens, user generates a proof that the
-					encrypted balance is sufficient for the requested withdrawn amount —
-					without revealing the actual balance. Contract will then encrypt the
-					withdrawn amount using user's public key and homomorphically subtract
-					it from the user's encrypted balance. Once the proof is verified, the
-					corresponding ERC-20 tokens are transferred back to user's wallet.
+				<h3 className="text-2xl font-bold bg-gradient-to-r from-orange-400 via-red-400 to-pink-400 bg-clip-text text-transparent mb-3">
+					💸 Withdraw
+				</h3>
+				<p className="text-sm text-gray-300 leading-relaxed mb-6 bg-gradient-to-r from-orange-500/10 to-red-500/10 p-4 rounded-lg border border-orange-500/20">
+					<strong className="text-orange-300">Secure Withdraw:</strong> Generate zero-knowledge proof of sufficient balance → Contract encrypts withdrawn amount → Homomorphically subtract from encrypted balance → Transfer ERC-20 tokens to wallet.
 				</p>
 			</div>
 
@@ -36,12 +33,12 @@ export function Withdraw({
 							setWithdrawAmount(value);
 						}
 					}}
-					placeholder={"Amount in ether (eg. 1.5, 0.01)"}
-					className="flex-1 bg-cyber-dark text-cyber-gray px-4 py-0.5 rounded-lg border border-cyber-green/20 focus:border-cyber-green focus:ring-1 focus:ring-cyber-green outline-none font-mono w-full"
+					placeholder={"Amount in token (eg. 1.5, 0.01)"}
+					className="flex-1 bg-gradient-to-r from-slate-800/50 to-slate-700/50 text-white px-4 py-3 rounded-xl border-2 border-orange-500/30 focus:border-orange-400 focus:ring-2 focus:ring-orange-400/50 outline-none font-mono w-full transition-all duration-200 hover:border-orange-400/50 placeholder:text-orange-300 placeholder:opacity-80"
 				/>
 				<button
 					type="button"
-					className="bg-cyber-dark w-full text-cyber-green px-2 py-1 rounded-md text-sm border border-cyber-green/60 disabled:opacity-50 disabled:cursor-not-allowed mb-2 hover:bg-cyber-green/60 transition-all duration-200 font-mono mt-2"
+					className="bg-gradient-to-r from-orange-600 via-red-600 to-pink-600 hover:from-orange-700 hover:via-red-700 hover:to-pink-700 w-full text-white px-4 py-3 rounded-xl text-sm font-bold border-2 border-orange-400/30 disabled:opacity-50 disabled:cursor-not-allowed mb-2 transition-all duration-200 transform hover:scale-105 disabled:transform-none shadow-lg hover:shadow-orange-500/25 mt-3"
 					onClick={async () => {
 						setLoading(true);
 						handlePrivateWithdraw(withdrawAmount)
@@ -53,22 +50,29 @@ export function Withdraw({
 								const isUserRejected = error?.message.includes("User rejected");
 
 								toast.error(
-									<div>
-										<p>
-											{isUserRejected
-												? "Transaction rejected"
-												: "An error occurred while withdrawing tokens. Please try again."}
-										</p>
+									<div className="bg-gradient-to-r from-red-500/90 to-pink-500/90 backdrop-blur-sm rounded-lg p-4 border border-red-400/30 shadow-lg">
+										<div className="flex items-center gap-3">
+											<div className="text-2xl">❌</div>
+											<div>
+												<h4 className="text-white font-bold text-sm">Withdraw Failed</h4>
+												<p className="text-red-100 text-xs mt-1">
+													{isUserRejected
+														? "Transaction rejected by user"
+														: "An error occurred while withdrawing tokens. Please try again."}
+												</p>
+											</div>
+										</div>
 									</div>,
 									{
 										position: "top-right",
-										autoClose: 5000,
-										hideProgressBar: true,
+										autoClose: 6000,
+										hideProgressBar: false,
 										closeOnClick: true,
-										pauseOnHover: false,
+										pauseOnHover: true,
 										draggable: true,
 										progress: undefined,
 										transition: Bounce,
+										className: "custom-toast-error",
 									},
 								);
 

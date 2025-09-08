@@ -19,19 +19,11 @@ export function Transfer({
 	return (
 		<>
 			<div className="flex-1">
-				<h3 className="text-cyber-green font-bold mb-2">Private Transfer</h3>
-				<p className="text-sm text-cyber-gray font-mono leading-relaxed mb-4">
-					In a private transfer, the recipient’s public key is fetched from the
-					protocol and used to encrypt the transferred amount. The sender proves
-					ownership of their current balance by decrypting their
-					ElGamal-encrypted balance and generating a zero-knowledge proof over
-					it. At the same time, the sender creates a new ElGamal ciphertext
-					representing <code>-amount</code>, which is homomorphically applied to
-					reduce their balance. Thanks to ElGamal’s additive homomorphism, this
-					update can be performed without revealing any values on-chain.
-					Meanwhile, Poseidon encryption creates efficient ciphertexts that
-					allow both sender and recipient to quickly decrypt their updated
-					balances locally without solving complex discrete logarithm problems.
+				<h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent mb-3">
+					🔄 Private Transfer
+				</h3>
+				<p className="text-sm text-gray-300 leading-relaxed mb-6 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 p-4 rounded-lg border border-blue-500/20">
+					<strong className="text-blue-300">Secure Transfer:</strong> Fetch recipient's public key → Encrypt amount → Generate zero-knowledge proof → Homomorphically update balances without revealing values.
 				</p>
 			</div>
 
@@ -41,7 +33,7 @@ export function Transfer({
 					value={to}
 					onChange={(e) => setTo(e.target.value.trim())}
 					placeholder={"Recipient address"}
-					className="flex-1 bg-cyber-dark text-cyber-gray px-4 py-0.5 rounded-lg border border-cyber-green/20 focus:border-cyber-green focus:ring-1 focus:ring-cyber-green outline-none font-mono w-full mb-2"
+					className="flex-1 bg-gradient-to-r from-slate-800/50 to-slate-700/50 text-white px-4 py-3 rounded-xl border-2 border-blue-500/30 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 outline-none font-mono w-full mb-3 transition-all duration-200 hover:border-blue-400/50 placeholder:text-blue-300 placeholder:opacity-80"
 				/>
 				<input
 					type="text"
@@ -53,26 +45,33 @@ export function Transfer({
 						}
 					}}
 					placeholder={"Amount"}
-					className="flex-1 bg-cyber-dark text-cyber-gray px-4 py-0.5 rounded-lg border border-cyber-green/20 focus:border-cyber-green focus:ring-1 focus:ring-cyber-green outline-none font-mono w-full"
+					className="flex-1 bg-gradient-to-r from-slate-800/50 to-slate-700/50 text-white px-4 py-3 rounded-xl border-2 border-blue-500/30 focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 outline-none font-mono w-full mb-3 transition-all duration-200 hover:border-blue-400/50 placeholder:text-blue-300 placeholder:opacity-80"
 				/>
 				<button
 					type="button"
-					className="bg-cyber-dark w-full text-cyber-green px-2 py-1 rounded-md text-sm border border-cyber-green/60 disabled:opacity-50 disabled:cursor-not-allowed mb-2 hover:bg-cyber-green/60 transition-all duration-200 font-mono mt-2"
+					className="bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 hover:from-blue-700 hover:via-cyan-700 hover:to-teal-700 w-full text-white px-4 py-3 rounded-xl text-sm font-bold border-2 border-blue-400/30 disabled:opacity-50 disabled:cursor-not-allowed mb-2 transition-all duration-200 transform hover:scale-105 disabled:transform-none shadow-lg hover:shadow-blue-500/25 mt-2"
 					onClick={async () => {
 						if (to.toLowerCase() === address?.toLowerCase()) {
 							toast.error(
-								<div>
-									<p>You cannot transfer tokens to yourself</p>
+								<div className="bg-gradient-to-r from-orange-500/90 to-red-500/90 backdrop-blur-sm rounded-lg p-4 border border-orange-400/30 shadow-lg">
+									<div className="flex items-center gap-3">
+										<div className="text-2xl">⚠️</div>
+										<div>
+											<h4 className="text-white font-bold text-sm">Invalid Transfer</h4>
+											<p className="text-orange-100 text-xs mt-1">You cannot transfer tokens to yourself</p>
+										</div>
+									</div>
 								</div>,
 								{
 									position: "top-right",
-									autoClose: 5000,
-									hideProgressBar: true,
+									autoClose: 6000,
+									hideProgressBar: false,
 									closeOnClick: true,
-									pauseOnHover: false,
+									pauseOnHover: true,
 									draggable: true,
 									progress: undefined,
 									transition: Bounce,
+									className: "custom-toast-warning",
 								},
 							);
 							return;
@@ -88,20 +87,27 @@ export function Transfer({
 							.catch((error) => {
 								const isUserRejected = error?.details.includes("User rejected");
 								toast.error(
-									<div>
-										<p>
-											{isUserRejected ? "Transaction rejected" : error?.message}
-										</p>
+									<div className="bg-gradient-to-r from-red-500/90 to-pink-500/90 backdrop-blur-sm rounded-lg p-4 border border-red-400/30 shadow-lg">
+										<div className="flex items-center gap-3">
+											<div className="text-2xl">❌</div>
+											<div>
+												<h4 className="text-white font-bold text-sm">Transfer Failed</h4>
+												<p className="text-red-100 text-xs mt-1">
+													{isUserRejected ? "Transaction rejected by user" : error?.message}
+												</p>
+											</div>
+										</div>
 									</div>,
 									{
 										position: "top-right",
-										autoClose: 5000,
-										hideProgressBar: true,
+										autoClose: 6000,
+										hideProgressBar: false,
 										closeOnClick: true,
-										pauseOnHover: false,
+										pauseOnHover: true,
 										draggable: true,
 										progress: undefined,
 										transition: Bounce,
+										className: "custom-toast-error",
 									},
 								);
 

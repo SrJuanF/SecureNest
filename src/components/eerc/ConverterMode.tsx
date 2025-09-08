@@ -134,7 +134,7 @@ export function ConverterMode({
 					<div className="text-cyber-green">Balance</div>
 					<div className="text-cyber-green/80 break-all flex flex-row">
 						{formatDisplayAmount(erc20Balance ?? 0n, erc20Decimals)}{" "}
-						{erc20Symbol}
+						{erc20Symbol?.replace('AVAXTEST', 'AVAXTEST')}
 						<RightTooltip
 							content="You can only request test tokens once every hour."
 							id="request-erc20-tooltip"
@@ -168,7 +168,7 @@ export function ConverterMode({
 					<div className="text-cyber-green/80 break-all flex flex-row">
 						{approveAmount === MAX_UINT256
 							? "MAX"
-							: `${formatDisplayAmount(approveAmount ?? 0n)} ${erc20Symbol}`}
+							: `${formatDisplayAmount(approveAmount ?? 0n, erc20Decimals)} ${erc20Symbol?.replace('AVAXTEST', 'AVAXTEST')}`}
 
 						<RightTooltip
 							content="The maximum amount of ERC-20 tokens that can be approved."
@@ -215,14 +215,14 @@ export function ConverterMode({
 						<CurvePoint
 							x={encryptedBalance[0] ?? 0}
 							y={encryptedBalance[1] ?? 0}
-							onChange={() => {}} // Empty function
+							onChange={() => { }} // Empty function
 							label={"C1"}
 							shouldCollapse={false}
 						/>
 						<CurvePoint
 							x={encryptedBalance[2] ?? 0}
 							y={encryptedBalance[3] ?? 0}
-							onChange={() => {}} // Empty function
+							onChange={() => { }} // Empty function
 							label={"C2"}
 							shouldCollapse={false}
 						/>
@@ -236,7 +236,7 @@ export function ConverterMode({
 					<div className="text-cyber-green/80 break-all">
 						<span className="text-cyber-green">
 							{formatDisplayAmount(decryptedBalance)}
-							{` e.${erc20Symbol}`}
+							{` e.${erc20Symbol?.replace('AVAXTEST', 'AVAXTEST')}`}
 						</span>
 					</div>
 				</div>
