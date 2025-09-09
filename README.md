@@ -24,6 +24,7 @@ A revolutionary encrypted token system that enables private social savings throu
 ### **📁 Project Structure**
 
 ```
+Branch Master
 eERC20/
 ├── fd-eerc/                            # React + TypeScript Frontend
 │   ├── src/
